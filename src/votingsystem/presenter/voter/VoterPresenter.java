@@ -23,9 +23,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.services.VoterService;
+import votingsystem.presenter.voterform.VoterFormPresenter;
+import votingsystem.presenter.voterform.VoterFormView;
 
 /**
  * FXML Controller class
@@ -36,12 +39,18 @@ public class VoterPresenter implements Initializable {
     @FXML
     private Button searchButton;
     @FXML
+    private Button editButton;
+    @FXML
     private TextField searchField;
     @FXML
     private TableView<Candidate> voterTable;
+    @FXML
+    private AnchorPane currentPane;
     
     ObservableList<Candidate> voters;
     ObjectProperty<Candidate> selectedVoter;
+    
+    VoterFormPresenter voterFormPresenter;
     
     @Inject
     VoterService vs;
@@ -52,13 +61,28 @@ public class VoterPresenter implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.voters = FXCollections.observableArrayList();
-        this.selectedVoter = new SimpleObjectProperty<>();        
+        this.selectedVoter = new SimpleObjectProperty<>();   
+        editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull());    
         prepareTable();        
         loadAllVoters();
     }    
 
     @FXML
     private void searchVoter(ActionEvent event) {
+    }
+    
+    @FXML
+    private void editVoter(ActionEvent event) {
+        if(voterTable.getSelectionModel().getSelectedItem() != null){
+            this.selectedVoter.set(voterTable.getSelectionModel().getSelectedItem());
+            VoterFormView voterFormView = new VoterFormView();
+            voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
+            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);      
+//            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);
+            AnchorPane contentPane = (AnchorPane)currentPane.getParent();
+            contentPane.getChildren().clear();
+            contentPane.getChildren().add(voterFormView.getView());
+        }
     }
 
     private void prepareTable() {
@@ -77,8 +101,6 @@ public class VoterPresenter implements Initializable {
     }
 
     private void loadAllVoters() {
-       Candidate c = new Candidate("M", "V", "2");
-       vs.save(c);
        List<Candidate> voters = vs.all();
         for (Candidate candidate : voters) {
             this.voters.add(candidate);

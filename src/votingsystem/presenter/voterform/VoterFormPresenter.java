@@ -6,11 +6,20 @@
 
 package votingsystem.presenter.voterform;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.models.ImageWrapper;
@@ -50,6 +60,7 @@ public class VoterFormPresenter implements Initializable {
     @FXML
     private AnchorPane currentPane;
     
+    private ObjectProperty<Candidate> selectedCandidate;
     
     Image img;    
     File file;
@@ -65,8 +76,47 @@ public class VoterFormPresenter implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+                this.selectedCandidate = new SimpleObjectProperty<>();
+        prepareGradeBox();
+        this.selectedCandidate.addListener(new ChangeListener<Candidate>() {
+            @Override
+            public void changed(ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) {
+                if (newValue != null) {
+                    firstNameField.setText(newValue.getFirstName());
+                    lastNameField.setText(newValue.getLastName());
+                    gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
+                    if(newValue.getImage().getData() != null){
+//                        File dirName = new File("C:\\temp\\");
+//                        String base64String=Base64.encode(newValue.getImage().getData().toByteArray());
+//                        byte[] bytes = Base64.decode(base64String);
+//                        BufferedImage imag = ImageIO.read(new ByteArrayInputStream(bytes));
+//                        ImageIO.write(imag, "jpg", new File(dirName,"snap.jpg"));
+                        img = new Image("file:" +file.getAbsolutePath());
+                        candidateImage.setImage(img);     
+                    }
+                    
+                } else {
+                    
+                }
+            }
+        });
+        if(this.selectedCandidate.get() != null){
+            fillForm();
+            System.out.println(this.selectedCandidate.get().getFirstName());
+        }
+        
     }    
+    
+    public void fillForm(){
+
+    }
+    
+    public void prepareGradeBox(){
+        List<String> gradeList = Arrays.asList("Seven", 
+                "Eight", "Nine","Ten","Eleven","Twelve");
+        ObservableList<String> oGradeList = FXCollections.observableArrayList(gradeList);
+        gradeLevelCBox.setItems(oGradeList);
+    }
 
     @FXML
     private void saveVoter(ActionEvent event) {
@@ -82,12 +132,13 @@ public class VoterFormPresenter implements Initializable {
                 System.out.println("file error.");
             }
             ImageWrapper image = new ImageWrapper();
-            image.setImageName("test.jpg");
+            image.setImageName("test.png");
             image.setData(imageData); 
+            candidate.setImage(image);            
         }
+        vs.save(candidate);
         VoterView voterView = new VoterView();
-        voterPresenter = (VoterPresenter)voterView.getPresenter();
-        
+        voterPresenter = (VoterPresenter)voterView.getPresenter();        
         AnchorPane contentPane = (AnchorPane)currentPane.getParent();
         contentPane.getChildren().clear();
         contentPane.getChildren().add(voterView.getView());
@@ -99,11 +150,28 @@ public class VoterFormPresenter implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png)(*.jpg)", "*.jpg");
         fileChooser.getExtensionFilters().add(extFilter);
         file = fileChooser.showOpenDialog(choosePhoto.getScene().getWindow());
-        System.out.println(file);        
-        String url = file.getAbsolutePath();
-        System.out.println(url);        
-        img = new Image("file:" +url);
+        img = new Image("file:" +file.getAbsolutePath());
         candidateImage.setImage(img);
     }
+
+    private void retrieveImage(){
+        
+    }
     
+  
+    /**
+     * @return the selectedCandidate
+     */
+    public ObjectProperty<Candidate> getSelectedCandidate() {
+        return selectedCandidate;
+    }
+
+    /**
+     * @param selectedCandidate the selectedCandidate to set
+     */
+    public void setSelectedCandidate(ObjectProperty<Candidate> selectedCandidate) {
+        this.selectedCandidate = selectedCandidate;
+    }
+
+  
 }
