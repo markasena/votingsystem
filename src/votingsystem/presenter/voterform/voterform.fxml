@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="currentPane" prefHeight="596.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.voterform.VoterFormPresenter">
+   <children>
+      <Button fx:id="saveButton" layoutX="153.0" layoutY="263.0" mnemonicParsing="false" onAction="#saveVoter" text="Save" />
+      <ImageView fx:id="candidateImage" fitHeight="215.0" fitWidth="197.0" layoutX="243.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="45.0" layoutY="37.0" text="Voter Information" />
+      <TextField fx:id="firstNameField" layoutX="45.0" layoutY="89.0" promptText="First Name">
+         <tooltip>
+            <Tooltip text="First Name" />
+         </tooltip>
+      </TextField>
+      <TextField fx:id="lastNameField" layoutX="45.0" layoutY="142.0" promptText="Last Name">
+         <tooltip>
+            <Tooltip text="Last Name" />
+         </tooltip>
+      </TextField>
+      <ComboBox fx:id="gradeLevelCBox" layoutX="45.0" layoutY="195.0" prefWidth="150.0" promptText="Grade Level">
+         <tooltip>
+            <Tooltip text="Grade Level" />
+         </tooltip>
+      </ComboBox>
+      <Button fx:id="choosePhoto" layoutX="243.0" layoutY="263.0" mnemonicParsing="false" onAction="#selectPhoto" text="Choose photo" />
+   </children>
+</AnchorPane>

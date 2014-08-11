@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1136.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.main.MainPresenter">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Voter">
+            <items>
+              <MenuItem fx:id="voterMenu" mnemonicParsing="false" onAction="#searchVoter" text="Seach Voter" />
+                  <MenuItem fx:id="addVoter" mnemonicParsing="false" onAction="#addVoter" text="Add" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Candidate">
+            <items>
+              <MenuItem fx:id="candidateMenu" mnemonicParsing="false" onAction="#searchCandidate" text="Search Candidate" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Party Lists">
+            <items>
+              <MenuItem fx:id="partylistMenu" mnemonicParsing="false" onAction="#searchPartylist" text="Search Partylists" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
