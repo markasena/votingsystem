@@ -54,6 +54,7 @@ public class VoterFormPresenter implements Initializable {
     private AnchorPane currentPane;
     
     private ObjectProperty<Candidate> selectedCandidate;
+    private ObjectProperty<Candidate> currentCandidate;
     
     Image img;    
     File file;
@@ -69,46 +70,16 @@ public class VoterFormPresenter implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-                this.selectedCandidate = new SimpleObjectProperty<>();
         prepareGradeBox();
-        this.selectedCandidate.addListener(new ChangeListener<Candidate>() {
-            @Override
-            public void changed(ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) {
-                if (newValue != null) {
-                    firstNameField.setText(newValue.getFirstName());
-                    lastNameField.setText(newValue.getLastName());
-                    gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
-                    if(newValue.getImage().getData() != null){
-                        File dirName = new File("/temp/img");
-                        dirName.mkdir();
-                        byte[] bytes = newValue.getImage().getData();
-                        BufferedImage imag;
-                        try {
-                            imag = ImageIO.read(new ByteArrayInputStream(bytes));
-                            ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
-                        } catch (IOException ex) {
-                            Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
-                        System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
-                        candidateImage.setImage(img);     
-                    }
-                    
-                } else {
-                    
-                }
-            }
-        });
-        if(this.selectedCandidate.get() != null){
-            fillForm();
-            System.out.println(this.selectedCandidate.get().getFirstName());
-        }
-        
+        Candidate c = new Candidate();
+        this.selectedCandidate = new SimpleObjectProperty<>(c);
+        this.currentCandidate = new SimpleObjectProperty<>();        
+        this.selectedCandidate.addListener(selectedCandidateLister());
+//        this.currentCandidate.bind(selectedCandidate);
+//        this.currentCandidate.addListener();
     }    
     
-    public void fillForm(){
-
-    }
+    
     
     public void prepareGradeBox(){
         List<String> gradeList = Arrays.asList("Seven", 
@@ -119,8 +90,10 @@ public class VoterFormPresenter implements Initializable {
 
     @FXML
     private void saveVoter(ActionEvent event) {
-        Candidate candidate = new Candidate(firstNameField.getText()
-                  , lastNameField.getText(), gradeLevelCBox.getSelectionModel().getSelectedItem());
+        Candidate candidate = selectedCandidate.get();
+        candidate.setFirstName(firstNameField.getText());
+        candidate.setLastName(lastNameField.getText());
+        candidate.setGradeLevel(gradeLevelCBox.getSelectionModel().getSelectedItem());
         if(file != null){
             byte[] imageData = new byte[(int) file.length()];
             try {            
@@ -133,9 +106,9 @@ public class VoterFormPresenter implements Initializable {
             ImageWrapper image = new ImageWrapper();
             image.setImageName(candidate.getFirstName()+candidate.getLastName() + ".png");
             image.setData(imageData); 
-            candidate.setImage(image);            
+            candidate.setImage(image); 
+            vs.save(candidate);
         }
-        vs.save(candidate);
         VoterView voterView = new VoterView();
         voterPresenter = (VoterPresenter)voterView.getPresenter();        
         AnchorPane contentPane = (AnchorPane)currentPane.getParent();
@@ -160,19 +133,47 @@ public class VoterFormPresenter implements Initializable {
     }
     
   
-    /**
-     * @return the selectedCandidate
-     */
+
     public ObjectProperty<Candidate> getSelectedCandidate() {
         return selectedCandidate;
     }
 
-    /**
-     * @param selectedCandidate the selectedCandidate to set
-     */
     public void setSelectedCandidate(ObjectProperty<Candidate> selectedCandidate) {
         this.selectedCandidate = selectedCandidate;
     }
-
+    
+    
+    public ChangeListener<Candidate> selectedCandidateLister(){
+       ChangeListener<Candidate> selectedCandidateListener = new ChangeListener<Candidate>() {
+            @Override
+            public void changed(ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) {
+                if (newValue != null) {
+                    firstNameField.setText(newValue.getFirstName());
+                    lastNameField.setText(newValue.getLastName());
+                    gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
+                    if(newValue.getImage().getData() != null){
+                        File dirName = new File("/temp/img");
+                        dirName.mkdir();
+                        byte[] bytes = newValue.getImage().getData();
+                        BufferedImage imag;
+                        try {
+                            imag = ImageIO.read(new ByteArrayInputStream(bytes));
+                            ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
+                        } catch (IOException ex) {
+                            Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+                        System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+                        candidateImage.setImage(img);     
+                    }                    
+                } else {
+                    
+                }
+            }
+        };
+       return selectedCandidateListener;
+    }
+    
+    
   
 }

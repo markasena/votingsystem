@@ -10,7 +10,8 @@
     <children>
       <Button fx:id="searchButton" layoutX="184.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchVoter" text="Search" />
       <TextField fx:id="searchField" layoutX="14.0" layoutY="24.0" />
-      <TableView fx:id="voterTable" layoutY="76.0" prefHeight="325.0" prefWidth="600.0" />
       <Button fx:id="editButton" layoutX="254.0" layoutY="24.0" mnemonicParsing="false" onAction="#editVoter" text="Edit" />
+      <StackPane fx:id="stackPane" layoutY="86.0" prefHeight="313.0" prefWidth="600.0" />
+      <Button fx:id="deleteButton" layoutX="310.0" layoutY="24.0" mnemonicParsing="false" onAction="#deleteVoter" text="Delete" />
    </children>
 </AnchorPane>

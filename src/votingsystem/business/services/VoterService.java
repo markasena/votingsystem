@@ -41,7 +41,7 @@ public class VoterService {
     
     public void save(Candidate candidate){
         et.begin();
-        em.merge(candidate);
+        Candidate merged = this.em.merge(candidate);;
         et.commit();
     }
     

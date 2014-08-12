@@ -14,11 +14,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,6 +29,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.services.VoterService;
@@ -38,50 +43,84 @@ import votingsystem.presenter.voterform.VoterFormView;
  * @author Hadouken
  */
 public class VoterPresenter implements Initializable {
+    
     @FXML
-    private Button searchButton;
+    private Button searchButton,deleteButton,editButton;    
     @FXML
-    private Button editButton;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private TableView<Candidate> voterTable;
+    private TextField searchField;    
     @FXML
     private AnchorPane currentPane;
-    
+    @FXML
+    private StackPane stackPane;    
+    private TableView<Candidate> voterTable;    
+    ProgressIndicator progressIndicator;    
+    Region veil;    
+    Task<ObservableList<Candidate>> task;
     ObservableList<Candidate> voters;
-    ObjectProperty<Candidate> selectedVoter;
-    
+    ObjectProperty<Candidate> selectedVoter;    
     VoterFormPresenter voterFormPresenter;
+    VoterFormView voterFormView;
     
     @Inject
     VoterService vs;
     
+    
+    
+
+    
+    
+    
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {        
         this.voters = FXCollections.observableArrayList();
-        this.selectedVoter = new SimpleObjectProperty<>();   
-        editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull());    
+        this.selectedVoter = new SimpleObjectProperty<>();              
         prepareTable();        
-        loadAllVoters();
+        loadAllVoters();    
+        deleteButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
+        editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
+        voters.addListener(new ListChangeListener<Candidate>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends Candidate> c) {
+               prepareTable();
+               loadAllVoters();
+            }
+        });
+        final ChangeListener<Candidate> storingListener = (ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) -> {
+            if(newValue != null){
+                vs.save(newValue);
+                loadAllVoters();
+            }
+        };
+        
+        
     }    
 
     @FXML
     private void searchVoter(ActionEvent event) {
+        
     }
     
     @FXML
-    private void editVoter(ActionEvent event) {
-        
+    private void deleteVoter(ActionEvent event) {
         if(voterTable.getSelectionModel().getSelectedItem() != null){
-            this.selectedVoter.set(voterTable.getSelectionModel().getSelectedItem());
-            VoterFormView voterFormView = new VoterFormView();
+            vs.remove(voterTable.getSelectionModel().getSelectedItem());
+            stackPane.getChildren().clear();
+            loadAllVoters();
+        }
+    }
+    
+    @FXML
+    private void editVoter(ActionEvent event) {        
+        if(voterTable.getSelectionModel().getSelectedItem() != null){
+            voterFormView = new VoterFormView();
             voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
-            voterFormPresenter.getSelectedCandidate().bindBidirectional(selectedVoter);
-//            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);
+            this.selectedVoter.set(voterTable.getSelectionModel().getSelectedItem());
+            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);
             AnchorPane contentPane = (AnchorPane)currentPane.getParent();
             contentPane.getChildren().clear();
             contentPane.getChildren().add(voterFormView.getView());
@@ -89,7 +128,8 @@ public class VoterPresenter implements Initializable {
     }
 
     private void prepareTable() {
-        this.voterTable.setEditable(false);
+        voterTable = new TableView<>();
+        this.voterTable.setEditable(false);        
         ObservableList columns = voterTable.getColumns();
         final TableColumn firstNameColumn = createTextColumn("firstName", "First Name");
         columns.add(firstNameColumn);
@@ -99,15 +139,29 @@ public class VoterPresenter implements Initializable {
         columns.add(gradeLevelColumn);
         voterTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         voterTable.setItems(this.voters);
-        voterTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        
+        voterTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);        
     }
 
     private void loadAllVoters() {
-       List<Candidate> voters = vs.all();
-        for (Candidate candidate : voters) {
-            this.voters.add(candidate);
-        }
+        progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(150, 150);
+        veil = new Region();
+        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
+        task = new Task<ObservableList<Candidate>>() {
+            @Override
+            protected ObservableList<Candidate> call() throws Exception {
+                List<Candidate> votersList = vs.all(); 
+                Thread.sleep(5);
+                voters = FXCollections.observableArrayList(votersList);                
+                return voters;
+            }
+        };
+        progressIndicator.progressProperty().bind(task.progressProperty());
+        veil.visibleProperty().bind(task.runningProperty());
+        progressIndicator.visibleProperty().bind(task.runningProperty());
+        voterTable.itemsProperty().bind(task.valueProperty()); 
+        stackPane.getChildren().addAll(voterTable,veil,progressIndicator);
+        new Thread(task).start();
     }
 
     private TableColumn createTextColumn(String name, String caption) {
@@ -117,5 +171,7 @@ public class VoterPresenter implements Initializable {
         return column;
     }
 
+    
+    
     
 }
