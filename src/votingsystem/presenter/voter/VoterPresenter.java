@@ -67,40 +67,34 @@ public class VoterPresenter implements Initializable {
     
     @Inject
     VoterService vs;
-    
-    
-    
 
-    
-    
-    
     /**
      * Initializes the controller class.
      * @param url
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {        
+    public void initialize(URL url, ResourceBundle rb) {
         this.voters = FXCollections.observableArrayList();
         this.selectedVoter = new SimpleObjectProperty<>();              
         prepareTable();        
         loadAllVoters();    
         deleteButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
         editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
-        voters.addListener(new ListChangeListener<Candidate>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends Candidate> c) {
-               prepareTable();
-               loadAllVoters();
-            }
-        });
-        
-        final ChangeListener<Candidate> storingListener = (ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) -> {
-            if(newValue != null){
-                vs.save(newValue);
-                loadAllVoters();
-            }
-        };
+//        voters.addListener(new ListChangeListener<Candidate>() {
+//            @Override
+//            public void onChanged(ListChangeListener.Change<? extends Candidate> c) {
+//               prepareTable();
+//               loadAllVoters();
+//            }
+//        });
+//        
+//        final ChangeListener<Candidate> storingListener = (ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) -> {
+//            if(newValue != null){
+//                vs.save(newValue);
+//                loadAllVoters();
+//            }
+//        };
         
         
     }    
@@ -131,8 +125,10 @@ public class VoterPresenter implements Initializable {
             contentPane.getChildren().add(voterFormView.getView());
         }
     }
-
-    private void prepareTable() {
+    
+    
+    //Prepare the table and columns
+    private void prepareTable(){
         voterTable = new TableView<>();
         this.voterTable.setEditable(false);        
         ObservableList columns = voterTable.getColumns();
@@ -146,7 +142,16 @@ public class VoterPresenter implements Initializable {
         voterTable.setItems(this.voters);
         voterTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);        
     }
-
+    
+    //create text column
+    private TableColumn createTextColumn(String name, String caption) {
+        TableColumn column = new TableColumn(caption);
+        column.setCellValueFactory(new PropertyValueFactory<>(name));
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        return column;
+    }
+    
+    //load all candidates from DB
     private void loadAllVoters() {
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(150, 150);
@@ -169,12 +174,7 @@ public class VoterPresenter implements Initializable {
         new Thread(task).start();
     }
 
-    private TableColumn createTextColumn(String name, String caption) {
-        TableColumn column = new TableColumn(caption);
-        column.setCellValueFactory(new PropertyValueFactory<>(name));
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
-        return column;
-    }
+
 
     
     

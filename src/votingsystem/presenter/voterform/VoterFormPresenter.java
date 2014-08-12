@@ -33,6 +33,7 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.models.ImageWrapper;
+import votingsystem.business.models.UserAccount;
 import votingsystem.business.services.VoterService;
 import votingsystem.presenter.voter.VoterPresenter;
 import votingsystem.presenter.voter.VoterView;
@@ -74,15 +75,15 @@ public class VoterFormPresenter implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {        
         prepareGradeBox();
         Candidate c = new Candidate();
+        
         this.selectedCandidate = new SimpleObjectProperty<>(c);
         this.currentCandidate = new SimpleObjectProperty<>();        
-        this.selectedCandidate.addListener(selectedCandidateLister());        
-        this.firstNameField.textProperty().addListener(firstNameFieldListeners());        
-        this.lastNameField.textProperty().addListener(lastNameFieldListeners());
-        
+        this.selectedCandidate.addListener(selectedCandidateListener());        
+        this.firstNameField.textProperty().addListener(textFieldListeners(this.firstNameField));        
+        this.lastNameField.textProperty().addListener(textFieldListeners(this.lastNameField));     
     }    
     
     
@@ -100,6 +101,13 @@ public class VoterFormPresenter implements Initializable {
         candidate.setFirstName(firstNameField.getText());
         candidate.setLastName(lastNameField.getText());
         candidate.setGradeLevel(gradeLevelCBox.getSelectionModel().getSelectedItem());
+        UserAccount ua;
+        if(candidate.getAccount() == null){
+            ua = new UserAccount();
+            ua.setUsername(candidate.getFirstName()+candidate.getLastName()+candidate.getGradeLevel());
+            ua.setPassword("" + (Math.random() * 1001));
+            candidate.setAccount(ua);
+        }
         if(file != null){
             byte[] imageData = new byte[(int) file.length()];
             try {            
@@ -108,13 +116,16 @@ public class VoterFormPresenter implements Initializable {
                 }
             } catch (IOException e) {
                 System.out.println("file error.");
-            }
-            ImageWrapper image = new ImageWrapper();
-            image.setImageName(candidate.getFirstName()+candidate.getLastName() + ".png");
-            image.setData(imageData); 
-            candidate.setImage(image); 
-            vs.save(candidate);
         }
+        if(imageData != null){
+          ImageWrapper image = new ImageWrapper();            
+          image.setImageName(candidate.getFirstName()+candidate.getLastName() + ".png");
+          image.setData(imageData); 
+          candidate.setImage(image);  
+        }
+        
+        }
+        vs.save(candidate);
         VoterView voterView = new VoterView();
         voterPresenter = (VoterPresenter)voterView.getPresenter();        
         AnchorPane contentPane = (AnchorPane)currentPane.getParent();
@@ -144,28 +155,31 @@ public class VoterFormPresenter implements Initializable {
     }
     
     
-    public ChangeListener<Candidate> selectedCandidateLister(){
+    public ChangeListener<Candidate> selectedCandidateListener(){
        ChangeListener<Candidate> selectedCandidateListener = new ChangeListener<Candidate>() {
             @Override
             public void changed(ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) {
                 if (newValue != null) {
                     firstNameField.setText(newValue.getFirstName());
                     lastNameField.setText(newValue.getLastName());
-                    gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
-                    if(newValue.getImage().getData() != null){
-                        File dirName = new File("/temp/img");
-                        dirName.mkdir();
-                        byte[] bytes = newValue.getImage().getData();
-                        BufferedImage imag;
-                        try {
-                            imag = ImageIO.read(new ByteArrayInputStream(bytes));
-                            ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
-                        } catch (IOException ex) {
-                            Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
+                    if(!newValue.getGradeLevel().equals("")){
+                        gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
+                    }    
+                    if(newValue.getImage() != null){
+                        if(!newValue.getImage().getImageName().equals("")){
+                            File dirName = new File("/temp/img");
+                            byte[] bytes = newValue.getImage().getData();
+                            BufferedImage imag;
+                            try {
+                                imag = ImageIO.read(new ByteArrayInputStream(bytes));
+                                ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
+                            } catch (IOException ex) {
+                                Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+                            System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+                            candidateImage.setImage(img);     
                         }
-                        img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
-                        System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
-                        candidateImage.setImage(img);     
                     }                    
                 } else {
                     
@@ -175,29 +189,19 @@ public class VoterFormPresenter implements Initializable {
        return selectedCandidateListener;
     }
     
-    public ChangeListener<String> firstNameFieldListeners(){
+    public ChangeListener<String> textFieldListeners(TextField tf){
         final Pattern wholeNumberPattern = Pattern.compile("[A-Za-zñÑ]*");
         return new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observableValue, final String oldValue,
                                 final String newValue) {
                 if (!wholeNumberPattern.matcher(newValue).matches())
-                    firstNameField.setText(oldValue);
+                    tf.setText(oldValue);
             }
         };
     }
     
-    public ChangeListener<String> lastNameFieldListeners(){
-        final Pattern wholeNumberPattern = Pattern.compile("[A-Za-zñÑ]*");
-        return new ChangeListener<String>() {
-            @Override
-            public void changed(final ObservableValue<? extends String> observableValue, final String oldValue,
-                                final String newValue) {
-                if (!wholeNumberPattern.matcher(newValue).matches())
-                    lastNameField.setText(oldValue);
-            }
-        };
-    }
+
 
  
   

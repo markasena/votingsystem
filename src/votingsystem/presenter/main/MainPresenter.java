@@ -17,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javax.inject.Inject;
+import votingsystem.business.services.VoterService;
 import votingsystem.presenter.voter.VoterPresenter;
 import votingsystem.presenter.voter.VoterView;
 import votingsystem.presenter.voterform.VoterFormPresenter;
@@ -43,7 +45,8 @@ public class MainPresenter implements Initializable {
     
     VoterPresenter voterPresenter;
     VoterFormPresenter voterFormPresenter;
-
+    @Inject
+    VoterService vs;
     
     @FXML
     private MenuItem addVoter;

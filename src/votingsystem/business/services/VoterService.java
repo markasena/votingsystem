@@ -27,6 +27,8 @@ public class VoterService {
     EntityTransaction et;
     
     
+    
+    
     @PostConstruct
     public void init(){
         this.em = (EntityManager) Persistence.createEntityManagerFactory("VotingSystemPU").createEntityManager();
