@@ -1,12 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package votingsystem.presenter.voterform;
-
-
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -75,8 +67,7 @@ public class VoterFormPresenter implements Initializable {
         this.selectedCandidate = new SimpleObjectProperty<>(c);
         this.currentCandidate = new SimpleObjectProperty<>();        
         this.selectedCandidate.addListener(selectedCandidateLister());
-//        this.currentCandidate.bind(selectedCandidate);
-//        this.currentCandidate.addListener();
+
     }    
     
     
@@ -128,11 +119,6 @@ public class VoterFormPresenter implements Initializable {
         }
     }
 
-    private void retrieveImage(){
-        
-    }
-    
-  
 
     public ObjectProperty<Candidate> getSelectedCandidate() {
         return selectedCandidate;
