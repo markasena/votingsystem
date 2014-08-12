@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -73,11 +75,12 @@ public class VoterPresenter implements Initializable {
     
     @FXML
     private void editVoter(ActionEvent event) {
+        
         if(voterTable.getSelectionModel().getSelectedItem() != null){
             this.selectedVoter.set(voterTable.getSelectionModel().getSelectedItem());
             VoterFormView voterFormView = new VoterFormView();
             voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
-            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);      
+            voterFormPresenter.getSelectedCandidate().bindBidirectional(selectedVoter);
 //            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);
             AnchorPane contentPane = (AnchorPane)currentPane.getParent();
             contentPane.getChildren().clear();

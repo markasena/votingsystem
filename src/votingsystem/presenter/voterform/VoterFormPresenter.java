@@ -7,25 +7,19 @@
 package votingsystem.presenter.voterform;
 
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.*;
+import java.util.logging.*;
+import javafx.beans.property.*;
+import javafx.beans.value.*;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -37,7 +31,6 @@ import votingsystem.business.models.ImageWrapper;
 import votingsystem.business.services.VoterService;
 import votingsystem.presenter.voter.VoterPresenter;
 import votingsystem.presenter.voter.VoterView;
-
 
 /**
  * FXML Controller class
@@ -86,12 +79,18 @@ public class VoterFormPresenter implements Initializable {
                     lastNameField.setText(newValue.getLastName());
                     gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
                     if(newValue.getImage().getData() != null){
-//                        File dirName = new File("C:\\temp\\");
-//                        String base64String=Base64.encode(newValue.getImage().getData().toByteArray());
-//                        byte[] bytes = Base64.decode(base64String);
-//                        BufferedImage imag = ImageIO.read(new ByteArrayInputStream(bytes));
-//                        ImageIO.write(imag, "jpg", new File(dirName,"snap.jpg"));
-                        img = new Image("file:" +file.getAbsolutePath());
+                        File dirName = new File("/temp/img");
+                        dirName.mkdir();
+                        byte[] bytes = newValue.getImage().getData();
+                        BufferedImage imag;
+                        try {
+                            imag = ImageIO.read(new ByteArrayInputStream(bytes));
+                            ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
+                        } catch (IOException ex) {
+                            Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+                        System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
                         candidateImage.setImage(img);     
                     }
                     
@@ -132,7 +131,7 @@ public class VoterFormPresenter implements Initializable {
                 System.out.println("file error.");
             }
             ImageWrapper image = new ImageWrapper();
-            image.setImageName("test.png");
+            image.setImageName(candidate.getFirstName()+candidate.getLastName() + ".png");
             image.setData(imageData); 
             candidate.setImage(image);            
         }
@@ -150,8 +149,10 @@ public class VoterFormPresenter implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png)(*.jpg)", "*.jpg");
         fileChooser.getExtensionFilters().add(extFilter);
         file = fileChooser.showOpenDialog(choosePhoto.getScene().getWindow());
-        img = new Image("file:" +file.getAbsolutePath());
-        candidateImage.setImage(img);
+        if(file != null){
+            img = new Image("file:" +file.getAbsolutePath());
+            candidateImage.setImage(img);
+        }
     }
 
     private void retrieveImage(){
