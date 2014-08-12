@@ -1,4 +1,5 @@
 <h1>VotingSystem</h1>
+<hr>
 <h4>Project by:</h4>
 <ul>
 <li>Almiradz Mling
@@ -6,3 +7,4 @@
 <li>Rodz Aguilar Piang
 <li>Mark Kendrick Asena
 </ul>
+<hr>
