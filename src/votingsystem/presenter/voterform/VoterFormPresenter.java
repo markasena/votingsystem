@@ -11,11 +11,13 @@
 
 package votingsystem.presenter.voterform;
 
+
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.*;
+import java.util.regex.Pattern;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 import javafx.collections.*;
@@ -77,8 +79,10 @@ public class VoterFormPresenter implements Initializable {
         Candidate c = new Candidate();
         this.selectedCandidate = new SimpleObjectProperty<>(c);
         this.currentCandidate = new SimpleObjectProperty<>();        
-        this.selectedCandidate.addListener(selectedCandidateLister());
-
+        this.selectedCandidate.addListener(selectedCandidateLister());        
+        this.firstNameField.textProperty().addListener(firstNameFieldListeners());        
+        this.lastNameField.textProperty().addListener(lastNameFieldListeners());
+        
     }    
     
     
@@ -171,6 +175,30 @@ public class VoterFormPresenter implements Initializable {
        return selectedCandidateListener;
     }
     
+    public ChangeListener<String> firstNameFieldListeners(){
+        final Pattern wholeNumberPattern = Pattern.compile("[A-Za-zñÑ]*");
+        return new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> observableValue, final String oldValue,
+                                final String newValue) {
+                if (!wholeNumberPattern.matcher(newValue).matches())
+                    firstNameField.setText(oldValue);
+            }
+        };
+    }
     
+    public ChangeListener<String> lastNameFieldListeners(){
+        final Pattern wholeNumberPattern = Pattern.compile("[A-Za-zñÑ]*");
+        return new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> observableValue, final String oldValue,
+                                final String newValue) {
+                if (!wholeNumberPattern.matcher(newValue).matches())
+                    lastNameField.setText(oldValue);
+            }
+        };
+    }
+
+ 
   
 }

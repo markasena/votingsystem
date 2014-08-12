@@ -27,19 +27,19 @@ import javax.persistence.Table;
  * @author Hadouken
  */
 @Entity
-@Table(name="admin")
+@Table(name="user_accouunt")
 @NamedQueries({
-@NamedQuery(name = "Admin.findAll", query = "SELECT a FROM Admin a"),
-    @NamedQuery(name = "Admin.findById", query = "SELECT a FROM Admin a WHERE a.id = :id"),
-    @NamedQuery(name = "Admin.findByUsername", query = "SELECT a FROM Admin a WHERE a.username = :username"),
-    @NamedQuery(name = "Admin.findByPassword", query = "SELECT a FROM Admin a WHERE a.password = :password")})
-public class Admin implements Serializable {
+@NamedQuery(name = "UserAccount.findAll", query = "SELECT a FROM UserAccount a"),
+    @NamedQuery(name = "UserAccount.findById", query = "SELECT a FROM UserAccount a WHERE a.id = :id"),
+    @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT a FROM UserAccount a WHERE a.username = :username"),
+    @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT a FROM UserAccount a WHERE a.password = :password")})
+public class UserAccount implements Serializable {
     private IntegerProperty id;
     private StringProperty username;
     private StringProperty password;
     
     
-    public Admin(){
+    public UserAccount(){
         this.id = new SimpleIntegerProperty();
         this.username = new SimpleStringProperty();
         this.password = new SimpleStringProperty();

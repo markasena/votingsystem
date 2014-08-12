@@ -35,6 +35,7 @@ public class Candidate implements Serializable {
     private StringProperty lastName;    
     private StringProperty gradeLevel;
     private ListProperty<Candidate> voter;
+    private ObjectProperty<UserAccount> account;
     private ObjectProperty<Position> position;
     private ObjectProperty<Party> partylist;
     private ImageWrapper image;
@@ -48,14 +49,9 @@ public class Candidate implements Serializable {
         this.voter = new SimpleListProperty<>();
         this.position = new SimpleObjectProperty<>();
         this.partylist = new SimpleObjectProperty<>();
+        this.account = new SimpleObjectProperty<>();
     }
 
-    public Candidate(String firstName, String lastName, String gradeLevel) {
-        this();
-        this.firstName.set(firstName);
-        this.lastName.set(lastName);
-        this.gradeLevel.set(gradeLevel);
-    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -143,5 +139,15 @@ public class Candidate implements Serializable {
         this.image = image;
     }
     
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account")
+    public UserAccount getAccount(){
+        return this.account.get();
+    }
+    
+    public void setAccount(UserAccount account){
+        this.account.set(account);
+    }
+        
     
 }

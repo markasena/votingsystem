@@ -26,7 +26,7 @@ import votingsystem.presenter.voterform.VoterFormView;
 
 /**
  * FXML Controller class
- *
+ * 
  * @author Hadouken
  */
 public class MainPresenter implements Initializable {
