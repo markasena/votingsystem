@@ -94,6 +94,7 @@ public class VoterPresenter implements Initializable {
                loadAllVoters();
             }
         });
+        
         final ChangeListener<Candidate> storingListener = (ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) -> {
             if(newValue != null){
                 vs.save(newValue);
