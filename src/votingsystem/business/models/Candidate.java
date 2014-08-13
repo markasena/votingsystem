@@ -26,8 +26,10 @@ import javax.persistence.*;
 @NamedQueries({
 @NamedQuery(name = "Candidate.findAll", query = "SELECT c FROM Candidate c"),
     @NamedQuery(name = "Candidate.findById", query = "SELECT c FROM Candidate c WHERE c.id = :id"),
-    @NamedQuery(name = "Candidate.findByFirstName", query = "SELECT c FROM Candidate c WHERE c.firstName = :firstName"),
-    @NamedQuery(name = "Candidate.findByLastName", query = "SELECT c FROM Candidate c WHERE c.lastName = :lastName"),
+    @NamedQuery(name = "Candidate.findByFirstName", query = "SELECT c FROM Candidate c WHERE lower('c.firstName') like :firstName"),
+    @NamedQuery(name = "Candidate.findByLastName", query = "SELECT c FROM Candidate c WHERE lower('c.lastName') like :lastName"),
+    @NamedQuery(name = "Candidate.findByFirstNameAndLastName", 
+            query = "SELECT c FROM Candidate c WHERE lower('c.lastName') like :lastName AND lower('c.firstName') like :firstName" ),
     @NamedQuery(name = "Candidate.findByGradeLevel", query = "SELECT c FROM Candidate c WHERE c.gradeLevel = :gradeLevel")})
 public class Candidate implements Serializable {
     private IntegerProperty id;

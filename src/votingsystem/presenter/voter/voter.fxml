@@ -6,12 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="currentPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.voter.VoterPresenter">
+<AnchorPane id="AnchorPane" fx:id="currentPane" prefHeight="404.0" prefWidth="702.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.voter.VoterPresenter">
     <children>
-      <Button fx:id="searchButton" layoutX="184.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchVoter" text="Search" />
-      <TextField fx:id="searchField" layoutX="14.0" layoutY="24.0" />
-      <Button fx:id="editButton" layoutX="254.0" layoutY="24.0" mnemonicParsing="false" onAction="#editVoter" text="Edit" />
-      <StackPane fx:id="stackPane" layoutY="86.0" prefHeight="313.0" prefWidth="600.0" />
-      <Button fx:id="deleteButton" layoutX="310.0" layoutY="24.0" mnemonicParsing="false" onAction="#deleteVoter" text="Delete" />
+      <Button fx:id="searchButton" layoutX="178.0" layoutY="28.0" mnemonicParsing="false" onAction="#searchVoter" text="Search" />
+      <TextField fx:id="searchField" layoutX="14.0" layoutY="29.0" />
+      <Button fx:id="editButton" layoutX="241.0" layoutY="28.0" mnemonicParsing="false" onAction="#editVoter" text="Edit" />
+      <StackPane fx:id="stackPane" layoutX="14.0" layoutY="69.0" prefHeight="313.0" prefWidth="464.0" />
+      <Button fx:id="deleteButton" layoutX="289.0" layoutY="29.0" mnemonicParsing="false" onAction="#deleteVoter" text="Remove" />
+      <Button fx:id="addVoter" layoutX="362.0" layoutY="28.0" mnemonicParsing="false" onAction="#addVoter" text="Add" />
    </children>
 </AnchorPane>

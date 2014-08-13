@@ -22,7 +22,7 @@ import votingsystem.business.services.VoterService;
 import votingsystem.presenter.voter.VoterPresenter;
 import votingsystem.presenter.voter.VoterView;
 import votingsystem.presenter.voterform.VoterFormPresenter;
-import votingsystem.presenter.voterform.VoterFormView;
+
 
 
 
@@ -64,14 +64,8 @@ public class MainPresenter implements Initializable {
         contentPane.getChildren().clear();
         contentPane.getChildren().add(voterView.getView());
     }
-    @FXML
-    private void addVoter(ActionEvent event) {
-        VoterFormView voterFormView = new VoterFormView();
-        voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
-        contentPane.getChildren().clear();
-        contentPane.getChildren().add(voterFormView.getView());
-    }
 
+    
     @FXML
     private void searchCandidate(ActionEvent event) {
         

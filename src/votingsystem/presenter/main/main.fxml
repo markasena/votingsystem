@@ -13,7 +13,6 @@
           <Menu mnemonicParsing="false" text="Voter">
             <items>
               <MenuItem fx:id="voterMenu" mnemonicParsing="false" onAction="#searchVoter" text="Seach Voter" />
-                  <MenuItem fx:id="addVoter" mnemonicParsing="false" onAction="#addVoter" text="Add" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Candidate">
@@ -30,6 +29,6 @@
       </MenuBar>
    </top>
    <center>
-      <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="contentPane" prefHeight="610.0" prefWidth="1136.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

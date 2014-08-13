@@ -162,25 +162,23 @@ public class VoterFormPresenter implements Initializable {
                 if (newValue != null) {
                     firstNameField.setText(newValue.getFirstName());
                     lastNameField.setText(newValue.getLastName());
-                    if(!newValue.getGradeLevel().equals("")){
-                        gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel()); 
-                    }    
-                    if(newValue.getImage() != null){
-                        if(!newValue.getImage().getImageName().equals("")){
-                            File dirName = new File("/temp/img");
-                            byte[] bytes = newValue.getImage().getData();
-                            BufferedImage imag;
-                            try {
-                                imag = ImageIO.read(new ByteArrayInputStream(bytes));
-                                ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
-                            } catch (IOException ex) {
-                                Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
-                            System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
-                            candidateImage.setImage(img);     
-                        }
-                    }                    
+                    gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel());    
+//                    if(newValue.getImage().getData() != null){
+//                        if(!newValue.getImage().getImageName().equals("")){
+//                            File dirName = new File("/temp/img");
+//                            byte[] bytes = newValue.getImage().getData();
+//                            BufferedImage imag;
+//                            try {
+//                                imag = ImageIO.read(new ByteArrayInputStream(bytes));
+//                                ImageIO.write(imag, "jpg", new File(dirName, newValue.getImage().getImageName()));
+//                            } catch (IOException ex) {
+//                                Logger.getLogger(VoterFormPresenter.class.getName()).log(Level.SEVERE, null, ex);
+//                            }
+//                            img = new Image("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+//                            System.out.println("file:" +dirName.getAbsolutePath() + "\\" + newValue.getImage().getImageName());
+//                            candidateImage.setImage(img);     
+//                        }
+//                    }                    
                 } else {
                     
                 }

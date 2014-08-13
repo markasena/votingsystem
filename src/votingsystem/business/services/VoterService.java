@@ -10,11 +10,13 @@
 
 package votingsystem.business.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import votingsystem.business.models.Candidate;
 
 /**
@@ -37,6 +39,24 @@ public class VoterService {
     
     public List<Candidate> all(){
         return em.createNamedQuery("Candidate.findAll").getResultList();
+    }
+    
+    public List<Candidate> search(String search){        
+        List<Candidate> searched = new ArrayList<>();
+        Query queryCandidatesByFirstName = em.createNamedQuery("Candidate.findByFirstName");
+        Query queryCandidatesByLastName = em.createNamedQuery("Candidate.findByLastName");
+        queryCandidatesByFirstName.setParameter("firstName","%" + search + "%");
+        queryCandidatesByLastName.setParameter("lastName", "%" + search + "%");
+        List<Candidate> firstNameList = queryCandidatesByFirstName.getResultList();
+        List<Candidate> lastNameList = queryCandidatesByLastName.getResultList();
+        firstNameList.stream().filter((candidate) -> (!searched.contains(candidate))).forEach((candidate) -> {
+            searched.add(candidate);
+        });
+        lastNameList.stream().filter((candidate) -> (!searched.contains(candidate))).forEach((candidate) -> {
+            searched.add(candidate);
+        });        
+
+        return searched;
     }
     
     public void save(){

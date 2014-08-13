@@ -18,7 +18,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -67,6 +66,10 @@ public class VoterPresenter implements Initializable {
     
     @Inject
     VoterService vs;
+    
+    
+    @FXML
+    private Button addVoter;
 
     /**
      * Initializes the controller class.
@@ -81,27 +84,20 @@ public class VoterPresenter implements Initializable {
         loadAllVoters();    
         deleteButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
         editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
-//        voters.addListener(new ListChangeListener<Candidate>() {
-//            @Override
-//            public void onChanged(ListChangeListener.Change<? extends Candidate> c) {
-//               prepareTable();
-//               loadAllVoters();
-//            }
-//        });
-//        
-//        final ChangeListener<Candidate> storingListener = (ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) -> {
-//            if(newValue != null){
-//                vs.save(newValue);
-//                loadAllVoters();
-//            }
-//        };
-        
-        
+        searchButton.disableProperty().bind(searchField.textProperty().isEmpty());  
+        searchField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(newValue.isEmpty()){
+                    loadAllVoters();
+                } 
+            }
+        });
     }    
 
     @FXML
-    private void searchVoter(ActionEvent event) {
-        
+    private void searchVoter(ActionEvent event) {        
+        loadAllVoters();
     }
     
     @FXML
@@ -153,14 +149,18 @@ public class VoterPresenter implements Initializable {
     
     //load all candidates from DB
     private void loadAllVoters() {
+        stackPane.getChildren().clear();
         progressIndicator = new ProgressIndicator();
         progressIndicator.setMaxSize(150, 150);
         veil = new Region();
         veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
         task = new Task<ObservableList<Candidate>>() {
             @Override
-            protected ObservableList<Candidate> call() throws Exception {
-                List<Candidate> votersList = vs.all(); 
+            protected ObservableList<Candidate> call() throws Exception {                
+                    List<Candidate> votersList= vs.all();
+                if(!searchField.getText().isEmpty()){
+                    votersList = vs.search(searchField.textProperty().get());
+                }                
                 Thread.sleep(5);
                 voters = FXCollections.observableArrayList(votersList);                
                 return voters;
@@ -174,9 +174,14 @@ public class VoterPresenter implements Initializable {
         new Thread(task).start();
     }
 
-
-
-    
+    @FXML
+    private void addVoter(ActionEvent event) {
+        VoterFormView voterFormView = new VoterFormView();
+        voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
+        AnchorPane contentPane = (AnchorPane)currentPane.getParent();
+        contentPane.getChildren().clear();
+        contentPane.getChildren().add(voterFormView.getView());
+    }
     
     
 }
