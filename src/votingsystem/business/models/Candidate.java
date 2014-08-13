@@ -18,7 +18,7 @@ import javafx.collections.ObservableList;
 import javax.persistence.*;
 
 /**
- * 
+ *
  * @author Hadouken
  */
 @Entity
