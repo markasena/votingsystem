@@ -98,8 +98,8 @@ public class VoterFormPresenter implements Initializable {
     @FXML
     private void saveVoter(ActionEvent event) {
         Candidate candidate = selectedCandidate.get();
-        candidate.setFirstName(firstNameField.getText());
-        candidate.setLastName(lastNameField.getText());
+        candidate.setFirstName(firstNameField.getText().toLowerCase());
+        candidate.setLastName(lastNameField.getText().toLowerCase());
         candidate.setGradeLevel(gradeLevelCBox.getSelectionModel().getSelectedItem());
         UserAccount ua;
         if(candidate.getAccount() == null){
@@ -155,13 +155,13 @@ public class VoterFormPresenter implements Initializable {
     }
     
     
-    public ChangeListener<Candidate> selectedCandidateListener(){
+    private ChangeListener<Candidate> selectedCandidateListener(){
        ChangeListener<Candidate> selectedCandidateListener = new ChangeListener<Candidate>() {
             @Override
             public void changed(ObservableValue<? extends Candidate> observable, Candidate oldValue, Candidate newValue) {
-                if (newValue != null) {
-                    firstNameField.setText(newValue.getFirstName());
-                    lastNameField.setText(newValue.getLastName());
+                if (newValue != null) {                    
+                    firstNameField.setText(firstCharToUpperCase(newValue.getFirstName()));
+                    lastNameField.setText(firstCharToUpperCase(newValue.getLastName()));
                     gradeLevelCBox.getSelectionModel().select(newValue.getGradeLevel());    
 //                    if(newValue.getImage().getData() != null){
 //                        if(!newValue.getImage().getImageName().equals("")){
@@ -187,7 +187,12 @@ public class VoterFormPresenter implements Initializable {
        return selectedCandidateListener;
     }
     
-    public ChangeListener<String> textFieldListeners(TextField tf){
+    
+    private String firstCharToUpperCase(String string){
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
+    }
+    
+    private ChangeListener<String> textFieldListeners(TextField tf){
         final Pattern wholeNumberPattern = Pattern.compile("[A-Za-zñÑ]*");
         return new ChangeListener<String>() {
             @Override

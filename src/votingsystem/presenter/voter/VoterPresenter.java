@@ -15,25 +15,15 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.fxml.*;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
+import javafx.scene.layout.*;
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.services.VoterService;
@@ -82,22 +72,25 @@ public class VoterPresenter implements Initializable {
         this.selectedVoter = new SimpleObjectProperty<>();              
         prepareTable();        
         loadAllVoters();    
-        deleteButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
-        editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
-        searchButton.disableProperty().bind(searchField.textProperty().isEmpty());  
-        searchField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.isEmpty()){
-                    loadAllVoters();
-                } 
+        rebindProperty();
+        searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if(newValue.isEmpty()){
+                loadAllVoters(); 
             }
         });
-    }    
+        
+    }   
+    
+    public void rebindProperty(){
+        deleteButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
+        editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
+        searchButton.disableProperty().bind(searchField.textProperty().isEmpty());
+    }
 
     @FXML
     private void searchVoter(ActionEvent event) {        
         loadAllVoters();
+        rebindProperty();
     }
     
     @FXML
@@ -107,6 +100,7 @@ public class VoterPresenter implements Initializable {
             stackPane.getChildren().clear();
             loadAllVoters();
         }
+        
     }
     
     @FXML
@@ -176,7 +170,7 @@ public class VoterPresenter implements Initializable {
 
     @FXML
     private void addVoter(ActionEvent event) {
-        VoterFormView voterFormView = new VoterFormView();
+        voterFormView = new VoterFormView();
         voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
         AnchorPane contentPane = (AnchorPane)currentPane.getParent();
         contentPane.getChildren().clear();
