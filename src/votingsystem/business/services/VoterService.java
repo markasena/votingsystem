@@ -59,6 +59,14 @@ public class VoterService {
         return searched;
     }
     
+    public List<Candidate> searchByGradeLevel(String gradeLevel){
+        Query query = em.createNamedQuery("Candidate.findByGradeLevel");
+        query.setParameter("gradeLevel", gradeLevel);
+        return query.getResultList();
+    }
+    
+    
+    
     public void save(){
         et.begin();
         em.flush();

@@ -10,17 +10,17 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="Voter">
+          <Menu mnemonicParsing="false" text="Voters">
             <items>
-              <MenuItem fx:id="voterMenu" mnemonicParsing="false" onAction="#searchVoter" text="Seach Voter" />
+              <MenuItem fx:id="voterMenu" mnemonicParsing="false" onAction="#searchVoter" text="Manage Voter" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Candidate">
             <items>
-              <MenuItem fx:id="candidateMenu" mnemonicParsing="false" onAction="#searchCandidate" text="Search Candidate" />
+              <MenuItem fx:id="candidateMenu" mnemonicParsing="false" onAction="#searchCandidate" text="Manage Candidates" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Party Lists">
+          <Menu mnemonicParsing="false" text="Party List">
             <items>
               <MenuItem fx:id="partylistMenu" mnemonicParsing="false" onAction="#searchPartylist" text="Search Partylists" />
             </items>

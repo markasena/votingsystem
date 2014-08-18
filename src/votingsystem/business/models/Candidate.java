@@ -37,7 +37,6 @@ public class Candidate implements Serializable {
     private StringProperty firstName;    
     private StringProperty lastName;    
     private StringProperty gradeLevel;
-    private BooleanProperty hasVoted;
     private ListProperty<Candidate> voter;
     private ObjectProperty<UserAccount> account;
     private ObjectProperty<Position> position;
@@ -54,7 +53,7 @@ public class Candidate implements Serializable {
         this.position = new SimpleObjectProperty<>();
         this.partylist = new SimpleObjectProperty<>();
         this.account = new SimpleObjectProperty<>();
-        this.hasVoted = new SimpleBooleanProperty();
+
     }
 
     
@@ -152,15 +151,6 @@ public class Candidate implements Serializable {
     
     public void setAccount(UserAccount account){
         this.account.set(account);
-    }
-    
-    @Column(name = "has_voted")
-    public Boolean getHasVoted(){
-        return this.hasVoted.get();
-    }
-        
-    public void setHasVoted(Boolean hasVoted){
-        this.hasVoted.set(hasVoted);
     }
     
 }

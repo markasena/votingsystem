@@ -32,8 +32,6 @@ public class LoginPresenter implements Initializable {
     private ComboBox<?> accountCBox;
     @FXML
     private Button loginButton;
-    
-    
 
     /**
      * Initializes the controller class.

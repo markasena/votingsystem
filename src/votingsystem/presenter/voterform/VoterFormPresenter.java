@@ -12,11 +12,11 @@
 package votingsystem.presenter.voterform;
 
 
-import java.awt.image.BufferedImage;
+
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.*;
+
 import java.util.regex.Pattern;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
@@ -29,7 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import javax.imageio.ImageIO;
+
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.models.ImageWrapper;
@@ -104,7 +104,7 @@ public class VoterFormPresenter implements Initializable {
         UserAccount ua;
         if(candidate.getAccount() == null){
             ua = new UserAccount();
-            ua.setUsername(candidate.getFirstName()+candidate.getLastName()+candidate.getGradeLevel());
+            ua.setUsername(candidate.getFirstName()+","+candidate.getLastName());
             ua.setPassword("" + (Math.random() * 1001));
             candidate.setAccount(ua);
         }

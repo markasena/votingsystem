@@ -15,12 +15,15 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
@@ -42,10 +45,11 @@ public class VoterPresenter implements Initializable {
     @FXML
     private TextField searchField;    
     @FXML
-    private AnchorPane currentPane;
+    private AnchorPane currentPane,dyanmicPane;
     @FXML
     private StackPane stackPane;    
-    private TableView<Candidate> voterTable;    
+    private TableView<Candidate> voterTable;  
+    
     ProgressIndicator progressIndicator;    
     Region veil;    
     Task<ObservableList<Candidate>> task;
@@ -53,13 +57,19 @@ public class VoterPresenter implements Initializable {
     ObjectProperty<Candidate> selectedVoter;    
     VoterFormPresenter voterFormPresenter;
     VoterFormView voterFormView;
-    
+    StringProperty label;
     @Inject
     VoterService vs;
     
     
     @FXML
     private Button addVoter;
+    
+    @FXML
+    private Label dynamicLabel;
+    
+    @FXML
+    private PieChart voterChart;
 
     /**
      * Initializes the controller class.
@@ -68,20 +78,34 @@ public class VoterPresenter implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.label = new SimpleStringProperty();
         this.voters = FXCollections.observableArrayList();
         this.selectedVoter = new SimpleObjectProperty<>();              
         prepareTable();        
+        prepareChart();
         loadAllVoters();    
-        rebindProperty();
+        rebindProperty();        
         searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if(newValue.isEmpty()){
                 loadAllVoters(); 
             }
         });
-        
     }   
     
-    public void rebindProperty(){
+    
+    
+    
+    private void prepareChart(){
+         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                         new PieChart.Data("Grade 7", vs.searchByGradeLevel("Seven").size()),
+                         new PieChart.Data("Grade 8", vs.searchByGradeLevel("Eight").size()),
+                         new PieChart.Data("Grade 9", vs.searchByGradeLevel("Nine").size()),
+                         new PieChart.Data("Grade 10", vs.searchByGradeLevel("Ten").size())
+                         );         
+         voterChart.setData(pieChartData);
+    }
+    
+    private void rebindProperty(){
         deleteButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
         editButton.disableProperty().bind(voterTable.getSelectionModel().selectedItemProperty().isNull()); 
         searchButton.disableProperty().bind(searchField.textProperty().isEmpty());
@@ -170,6 +194,7 @@ public class VoterPresenter implements Initializable {
 
     @FXML
     private void addVoter(ActionEvent event) {
+
         voterFormView = new VoterFormView();
         voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
         AnchorPane contentPane = (AnchorPane)currentPane.getParent();
