@@ -13,8 +13,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import votingsystem.business.models.UserAccount;
+import votingsystem.presenter.admin.AdminPresenter;
+import votingsystem.presenter.admin.AdminView;
 
 /**
  * FXML Controller class
@@ -24,22 +32,34 @@ import votingsystem.business.models.UserAccount;
 public class VotePresenter implements Initializable {
     
     
-    private ObjectProperty<UserAccount> currentUser;
+    @FXML
+    private Label labelabel;
+    
+    
+    @FXML
+    private Button showMeName;
+    
+    private ObjectProperty<UserAccount> user;
+
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        currentUser = new SimpleObjectProperty<>();
-        
-        
+        user = new SimpleObjectProperty<>();
     }    
 
     /**
      * @return the currentUser
      */
-    public ObjectProperty<UserAccount> getCurrentUser() {
-        return currentUser;
+    public ObjectProperty<UserAccount> getUser() {
+        return user;
+    }
+    
+    @FXML
+    private void showMeNameAction(ActionEvent event) {          
+        labelabel.setText(user.get().getUsername());
     }
     
 }

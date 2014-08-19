@@ -75,12 +75,13 @@ public class LoginPresenter implements Initializable {
         if(this.user.get().getPassword().equals(passwordField.textProperty().get())){
             if(this.getUser().get().getUsername().equals("admin")){
                 AdminView adminView = new AdminView();
-                this.adminPresenter = (AdminPresenter) adminView.getPresenter();
-                this.adminPresenter.getUser().set(this.user.get());
+                this.adminPresenter = (AdminPresenter) adminView.getPresenter();                
+                this.adminPresenter.getUser().bindBidirectional(user);
                 changeContentPane(adminView.getView());
             }else{
                 VoteView voteView = new VoteView();
                 this.votePresenter = (VotePresenter) voteView.getPresenter();
+                this.votePresenter.getUser().bindBidirectional(user);
                 changeContentPane(voteView.getView());
             }
         }else{
