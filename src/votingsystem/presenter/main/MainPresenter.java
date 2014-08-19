@@ -35,6 +35,7 @@ import votingsystem.business.services.VoterService;
 import votingsystem.presenter.admin.AdminPresenter;
 import votingsystem.presenter.admin.AdminView;
 import votingsystem.presenter.login.LoginPresenter;
+import votingsystem.presenter.login.LoginView;
 import votingsystem.presenter.vote.VotePresenter;
 import votingsystem.presenter.vote.VoteView;
 import votingsystem.presenter.voter.VoterPresenter;
@@ -93,11 +94,11 @@ public class MainPresenter implements Initializable {
                  mainMenu.setVisible(true);
             }
         });
-//        LoginView loginView = new LoginView();
-//        this.loginPresenter = (LoginPresenter) loginView.getPresenter();
-////        this.loginPresenter.getUser().bind(this.currentUser);        
-//        contentPane.getChildren().clear();
-//        contentPane.getChildren().add(loginView.getView());
+        LoginView loginView = new LoginView();
+        this.loginPresenter = (LoginPresenter) loginView.getPresenter();
+        this.user.bindBidirectional(this.loginPresenter.getUser());
+        contentPane.getChildren().clear();
+        contentPane.getChildren().add(loginView.getView());
     }    
 
     @FXML
@@ -124,37 +125,4 @@ public class MainPresenter implements Initializable {
     private void searchPartylist(ActionEvent event) {
     }
 
-    @FXML
-    private void loginAccount(ActionEvent event) {
-        this.user.set(auth.findUser(accountCBox.getEditor().textProperty().get()));
-        if(this.user.get().getPassword().equals(passwordField.textProperty().get())){
-            if(this.getUser().get().getUsername().equals("admin")){
-                AdminView adminView = new AdminView();
-                this.adminPresenter = (AdminPresenter) adminView.getPresenter();
-                this.adminPresenter.getUser().bind(user);
-                changeContentPane(adminView.getView());
-            }else{
-                VoteView voteView = new VoteView();
-                this.votePresenter = (VotePresenter) voteView.getPresenter();
-                this.user.bind(votePresenter.getCurrentUser());
-                changeContentPane(voteView.getView());
-            }
-        }else{
-            
-        }
-    }
-
-    @FXML
-    private void comboAction(Event event) {
-       userList = FXCollections.observableList(auth.findByUserName(accountCBox.getEditor().textProperty().get()));
-       accountCBox.setItems(userList); 
-        
-    }
-    
-    private void changeContentPane(Parent parent){       
-        contentPane.getChildren().clear();
-        contentPane.getChildren().add(parent);
-        
-    }
-    
 }

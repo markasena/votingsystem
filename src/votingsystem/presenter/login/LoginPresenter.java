@@ -76,7 +76,7 @@ public class LoginPresenter implements Initializable {
             if(this.getUser().get().getUsername().equals("admin")){
                 AdminView adminView = new AdminView();
                 this.adminPresenter = (AdminPresenter) adminView.getPresenter();
-                this.user.bind(this.adminPresenter.getUser());
+                this.adminPresenter.getUser().set(this.user.get());
                 changeContentPane(adminView.getView());
             }else{
                 VoteView voteView = new VoteView();
