@@ -20,6 +20,7 @@ import votingsystem.business.models.UserAccount;
  * FXML Controller class
  *
  * @author Hadouken
+ * 
  */
 public class AdminPresenter implements Initializable {
     private ObjectProperty<UserAccount> user;

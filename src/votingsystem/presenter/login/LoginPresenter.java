@@ -65,7 +65,6 @@ public class LoginPresenter implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         user = new SimpleObjectProperty<>();
-
     }    
 
 

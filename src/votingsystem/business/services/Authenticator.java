@@ -19,26 +19,25 @@ import votingsystem.business.models.UserAccount;
 /**
  *
  * @author Hadouken
+ * This class is used to Authenticate users
  */
 public class Authenticator {
+    
+    //Injected to make sure there is only one instance
     @Inject
-    DBService es;
+    DBService service;
     
     public List<UserAccount> findByUserName(String search){
          List<UserAccount> searched;
-         Query query = es.getManager().createNamedQuery("UserAccount.findByUsername");
+         Query query = service.getManager().createNamedQuery("UserAccount.findByUsername");
          query.setParameter("username", "%" + search + "%");
          searched = query.getResultList();
          return searched;
     }
     
-    public UserAccount findById(Integer id){        
-        return es.getManager().find(UserAccount.class, id);
-    }
-    
     public UserAccount findUser(String username){
         UserAccount ua;
-        Query query = es.getManager().createNamedQuery("UserAccount.findByUsername");
+        Query query = service.getManager().createNamedQuery("UserAccount.findByUsername");
         query.setParameter("username", username);
         ua = (UserAccount)query.getSingleResult();
         return ua;

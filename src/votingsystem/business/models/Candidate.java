@@ -21,6 +21,13 @@ import javax.persistence.*;
 /**
  *
  * @author Hadouken
+ * This entity is using property access.
+ * Entity for candidate table
+ * Known relationships:
+ * *OneToOne to UserAccount,ImageWrapper
+ * **ManyToOne to Party, Position
+ * ***ManyToMany to self where every candidate can also vote a candidate
+ * 
  */
 @Entity
 @Table(name = "candidate")
@@ -44,6 +51,8 @@ public class Candidate implements Serializable {
     private ImageWrapper image;
     
     
+    
+    //initiating properties
     public Candidate() {
         this.id = new SimpleIntegerProperty();
         this.firstName = new SimpleStringProperty();

@@ -25,6 +25,7 @@ import javax.persistence.Table;
 /**
  *
  * @author Hadouken
+ * This entity is using property access.
  */
 @Entity
 @Table(name="user_accouunt")

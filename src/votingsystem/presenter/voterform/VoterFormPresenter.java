@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
 import votingsystem.business.models.ImageWrapper;
 import votingsystem.business.models.UserAccount;
-import votingsystem.business.services.VoterService;
+import votingsystem.business.services.CandidateService;
 import votingsystem.presenter.voter.VoterPresenter;
 import votingsystem.presenter.voter.VoterView;
 
@@ -67,7 +67,7 @@ public class VoterFormPresenter implements Initializable {
     VoterPresenter voterPresenter;
     
     @Inject
-    VoterService vs;
+    CandidateService vs;
     
     /**
      * Initializes the controller class.

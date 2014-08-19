@@ -17,6 +17,10 @@ import javax.persistence.*;
 /**
  *
  * @author Hadouken
+ * This entity is using property access.
+ * Known relationships:
+ * *OneToMany to Candidate
+ * 
  */
 @Entity
 @Table(name= "party")

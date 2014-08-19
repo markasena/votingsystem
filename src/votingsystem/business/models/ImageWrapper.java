@@ -20,11 +20,11 @@ import javax.persistence.Id;
 /**
  *
  * @author Hadouken
+ * This Entity is used for storing image raw data into the database.
  */
 @Entity
 public class ImageWrapper implements Serializable{
-    
-    
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
@@ -61,8 +61,5 @@ public class ImageWrapper implements Serializable{
     public void setData(byte[] data) {
         this.data = data;
     }
-    
-    
-    
-    
+ 
 }

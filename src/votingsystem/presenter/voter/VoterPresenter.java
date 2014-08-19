@@ -29,7 +29,7 @@ import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
 import javax.inject.Inject;
 import votingsystem.business.models.Candidate;
-import votingsystem.business.services.VoterService;
+import votingsystem.business.services.CandidateService;
 import votingsystem.presenter.voterform.VoterFormPresenter;
 import votingsystem.presenter.voterform.VoterFormView;
 
@@ -53,13 +53,13 @@ public class VoterPresenter implements Initializable {
     ProgressIndicator progressIndicator;    
     Region veil;    
     Task<ObservableList<Candidate>> task;
-    ObservableList<Candidate> voters;
-    ObjectProperty<Candidate> selectedVoter;    
+    ObservableList<Candidate> candidates;
+    ObjectProperty<Candidate> selectedCandidate;    
     VoterFormPresenter voterFormPresenter;
     VoterFormView voterFormView;
     StringProperty label;
     @Inject
-    VoterService vs;
+    CandidateService vs;
     
     
     @FXML
@@ -79,8 +79,8 @@ public class VoterPresenter implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.label = new SimpleStringProperty();
-        this.voters = FXCollections.observableArrayList();
-        this.selectedVoter = new SimpleObjectProperty<>();              
+        this.candidates = FXCollections.observableArrayList();
+        this.selectedCandidate = new SimpleObjectProperty<>();              
         prepareTable();        
         prepareChart();
         loadAllVoters();    
@@ -129,8 +129,8 @@ public class VoterPresenter implements Initializable {
         if(voterTable.getSelectionModel().getSelectedItem() != null){
             voterFormView = new VoterFormView();
             voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
-            this.selectedVoter.set(voterTable.getSelectionModel().getSelectedItem());
-            voterFormPresenter.getSelectedCandidate().bind(selectedVoter);
+            this.selectedCandidate.set(voterTable.getSelectionModel().getSelectedItem());
+            voterFormPresenter.getSelectedCandidate().bind(selectedCandidate);
             AnchorPane contentPane = (AnchorPane)currentPane.getParent();
             contentPane.getChildren().clear();
             contentPane.getChildren().add(voterFormView.getView());
@@ -150,7 +150,7 @@ public class VoterPresenter implements Initializable {
         final TableColumn gradeLevelColumn = createTextColumn("gradeLevel", "Grade Level");
         columns.add(gradeLevelColumn);
         voterTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        voterTable.setItems(this.voters);
+        voterTable.setItems(this.candidates);
         voterTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);        
     }
     
@@ -177,8 +177,8 @@ public class VoterPresenter implements Initializable {
                     votersList = vs.search(searchField.textProperty().get());
                 }                
                 Thread.sleep(5);
-                voters = FXCollections.observableArrayList(votersList);                
-                return voters;
+                candidates = FXCollections.observableArrayList(votersList);                
+                return candidates;
             }
         };
         progressIndicator.progressProperty().bind(task.progressProperty());

@@ -17,10 +17,11 @@ import javax.persistence.Persistence;
 /**
  *
  * @author Hadouken
+ * This class handles every transaction that will occur.
  */
 public class DBService {
-    EntityManager em;
-    EntityTransaction et;
+    private EntityManager em;
+    private EntityTransaction et;
 
     @PostConstruct
     public void init(){
