@@ -31,8 +31,8 @@ import javax.persistence.Table;
 @NamedQueries({
 @NamedQuery(name = "UserAccount.findAll", query = "SELECT a FROM UserAccount a"),
     @NamedQuery(name = "UserAccount.findById", query = "SELECT a FROM UserAccount a WHERE a.id = :id"),
-    @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT a FROM UserAccount a WHERE a.username = :username"),
-    @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT a FROM UserAccount a WHERE a.password = :password")})
+    @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT a FROM UserAccount a WHERE a.username LIKE :username"),
+    @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT a FROM UserAccount a WHERE a.password LIKE :password")})
 public class UserAccount implements Serializable {
     private IntegerProperty id;
     private StringProperty username;
@@ -73,6 +73,11 @@ public class UserAccount implements Serializable {
     
     public void setPassword(String password){
         this.password.set(password);
+    }
+    
+    @Override
+    public String toString(){
+        return getUsername();
     }
     
 }

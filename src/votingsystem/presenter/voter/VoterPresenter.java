@@ -91,10 +91,7 @@ public class VoterPresenter implements Initializable {
             }
         });
     }   
-    
-    
-    
-    
+
     private void prepareChart(){
          ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                          new PieChart.Data("Grade 7", vs.searchByGradeLevel("Seven").size()),

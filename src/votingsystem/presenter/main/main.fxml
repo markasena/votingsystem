@@ -8,7 +8,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1136.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.main.MainPresenter">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar fx:id="mainMenu" visible="false" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Voters">
             <items>
@@ -29,6 +29,11 @@
       </MenuBar>
    </top>
    <center>
-      <AnchorPane fx:id="contentPane" prefHeight="610.0" prefWidth="1136.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="contentPane" prefHeight="610.0" prefWidth="1136.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="loginButton" layoutX="504.0" layoutY="323.0" mnemonicParsing="false" onAction="#loginAccount" prefHeight="25.0" prefWidth="102.0" text="LOGIN" />
+            <PasswordField fx:id="passwordField" layoutX="442.0" layoutY="283.0" prefHeight="25.0" prefWidth="227.0" />
+            <ComboBox fx:id="accountCBox" editable="true" layoutX="442.0" layoutY="246.0" onShown="#comboAction" prefHeight="25.0" prefWidth="227.0" />
+         </children></AnchorPane>
    </center>
 </BorderPane>
