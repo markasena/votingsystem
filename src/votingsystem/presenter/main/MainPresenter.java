@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
@@ -32,8 +33,6 @@ import votingsystem.presenter.voter.VoterPresenter;
 import votingsystem.presenter.voter.VoterView;
 
 
-
-
 /**
  * FXML Controller class
  * 
@@ -41,7 +40,7 @@ import votingsystem.presenter.voter.VoterView;
  */
 public class MainPresenter implements Initializable {
     @FXML
-    private MenuItem voterMenu,candidateMenu,partyListMenu;    
+    private MenuItem voterMenu,candidateMenu;    
     @FXML
     private MenuBar mainMenu;
     @FXML
@@ -56,6 +55,10 @@ public class MainPresenter implements Initializable {
     private CandidateService vs;    
     @Inject
     private Authenticator auth;
+    @FXML
+    private MenuItem partylistMenu;
+    @FXML
+    private Button closeButton;
     
     
     @Override
@@ -95,6 +98,10 @@ public class MainPresenter implements Initializable {
 
     @FXML
     private void searchPartylist(ActionEvent event) {
+    }
+
+    @FXML
+    private void closeStage(ActionEvent event) {
     }
 
 }

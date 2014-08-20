@@ -6,29 +6,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1136.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.main.MainPresenter">
-   <top>
-      <MenuBar fx:id="mainMenu" visible="false" BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Voters">
-            <items>
-              <MenuItem fx:id="voterMenu" mnemonicParsing="false" onAction="#searchVoter" text="Manage Voter" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Candidate">
-            <items>
-              <MenuItem fx:id="candidateMenu" mnemonicParsing="false" onAction="#searchCandidate" text="Manage Candidates" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Party List">
-            <items>
-              <MenuItem fx:id="partylistMenu" mnemonicParsing="false" onAction="#searchPartylist" text="Search Partylists" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1136.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="votingsystem.presenter.main.MainPresenter">
    <center>
       <AnchorPane fx:id="contentPane" prefHeight="610.0" prefWidth="1136.0" BorderPane.alignment="CENTER" />
    </center>
+   <top>
+      <AnchorPane prefHeight="26.0" prefWidth="1136.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar fx:id="mainMenu" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+               <menus>
+                  <Menu mnemonicParsing="false" text="Voters">
+                     <items>
+                        <MenuItem fx:id="voterMenu" mnemonicParsing="false" onAction="#searchVoter" text="Manage Voter" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Candidate">
+                     <items>
+                        <MenuItem fx:id="candidateMenu" mnemonicParsing="false" onAction="#searchCandidate" text="Manage Candidates" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Party List">
+                     <items>
+                        <MenuItem fx:id="partylistMenu" mnemonicParsing="false" onAction="#searchPartylist" text="Search Partylists" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+            <Button id="closeButton" fx:id="closeButton" layoutX="1117.0" layoutY="2.0" mnemonicParsing="false" onAction="#closeStage" style="-fx-background-color: transparent;" />
+         </children>
+      </AnchorPane>
+   </top>
 </BorderPane>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -30,7 +31,8 @@
             <Insets top="5.0" />
          </padding>
       </VBox>
-      <Label layoutX="44.0" layoutY="39.0" prefHeight="65.0" prefWidth="206.0" style="-fx-font-size: 40;" text="Voters List" />
+      <Label layoutX="44.0" layoutY="39.0" prefHeight="65.0" prefWidth="206.0" style="-fx-font-size: 40;" text="Voters List">
+        </Label>
       <AnchorPane fx:id="dynamicPane" layoutX="568.0" layoutY="128.0" prefHeight="200.0" prefWidth="200.0">
          <children>
             <PieChart fx:id="voterChart" />

@@ -120,6 +120,8 @@ public class VoterPresenter implements Initializable {
             vs.remove(voterTable.getSelectionModel().getSelectedItem());
             stackPane.getChildren().clear();
             loadAllVoters();
+            prepareChart();
+            voterTable.getSelectionModel().clearSelection();
         }
         
     }
@@ -191,7 +193,6 @@ public class VoterPresenter implements Initializable {
 
     @FXML
     private void addVoter(ActionEvent event) {
-
         voterFormView = new VoterFormView();
         voterFormPresenter = (VoterFormPresenter) voterFormView.getPresenter();
         AnchorPane contentPane = (AnchorPane)currentPane.getParent();

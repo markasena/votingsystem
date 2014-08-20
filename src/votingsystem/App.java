@@ -9,6 +9,7 @@ package votingsystem;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import votingsystem.presenter.main.MainView;
 
 /**
@@ -21,7 +22,11 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         MainView mainView = new MainView();
         Scene scene = new Scene(mainView.getView());
-        stage.setScene(scene);
+        stage.setTitle("Voting System");
+        stage.initStyle(StageStyle.TRANSPARENT);
+//        final String uri = getClass().getResource("app.css").toExternalForm();
+//        scene.getStylesheets().add(uri);
+        stage.setScene(scene);        
         stage.show();
     }
 
